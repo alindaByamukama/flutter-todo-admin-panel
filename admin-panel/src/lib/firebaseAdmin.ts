@@ -1,9 +1,14 @@
 import admin from 'firebase-admin';
 import { cert } from 'firebase-admin/app';
-// import serviceAccount from '../../serviceAccountKey.json';
 import type { ServiceAccount } from 'firebase-admin';
 
-const serviceAccount = JSON.parse(process.env.VERCEL_SERVICE_ACCOUNT!) as ServiceAccount;
+let serviceAccount: ServiceAccount;
+
+if (process.env.VERCEL_SERVICE_ACCOUNT) {
+  serviceAccount = JSON.parse(process.env.VERCEL_SERVICE_ACCOUNT) as ServiceAccount;
+} else {
+  serviceAccount = require('../../serviceAccountKey.json') as ServiceAccount;
+}
 
 if (!admin.apps.length) {
   admin.initializeApp({
